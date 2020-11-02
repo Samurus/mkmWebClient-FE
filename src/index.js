@@ -4,11 +4,14 @@ import './App.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import NavigationBar from "./components/NavigationBar";
+import {BrowserRouter} from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>
     <NavigationBar />
-    <App />
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

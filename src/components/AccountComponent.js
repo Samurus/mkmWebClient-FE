@@ -1,7 +1,6 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table'
 import AccountService from "../services/AccountService";
-import {Container} from "react-bootstrap";
 
 class AccountComponent extends React.Component {
     constructor(props) {
@@ -13,7 +12,6 @@ class AccountComponent extends React.Component {
 
     componentDidMount() {
         AccountService.getAccountInformation().then((response) => {
-            console.log(response.data)
             this.setState({account: response.data})
         });
     }

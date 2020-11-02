@@ -1,7 +1,10 @@
 import React from 'react';
 import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
 import NavbarBrand from "react-bootstrap/NavbarBrand";
+import NavLink from "react-bootstrap/NavLink";
 import logo from '../assets/Test.png';
+
 class NavigationBar extends React.Component {
     constructor(props) {
         super(props);
@@ -12,8 +15,8 @@ class NavigationBar extends React.Component {
 
     render() {
         return (
-            <Navbar bg="dark" sticky={"top"}>
-                <NavbarBrand href="#home">
+            <Navbar variant={"dark"} bg={"dark"} sticky={"top"}>
+                <NavbarBrand href="/">
                     <img
                         src={logo}
                         width="50"
@@ -22,6 +25,10 @@ class NavigationBar extends React.Component {
                         alt="Test Logo"
                     />
                 </NavbarBrand>
+                <Nav>
+                    <NavLink href={"/"}>Home</NavLink>
+                    <NavLink href={"/upload"}>Upload Sorter CSV</NavLink>
+                </Nav>
             </Navbar>
         )
 
