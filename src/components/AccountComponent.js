@@ -1,5 +1,7 @@
 import React from 'react';
+import Table from 'react-bootstrap/Table'
 import AccountService from "../services/AccountService";
+import {Container} from "react-bootstrap";
 
 class AccountComponent extends React.Component {
     constructor(props) {
@@ -18,10 +20,10 @@ class AccountComponent extends React.Component {
 
     render() {
         return (
-            <div>
+            <Container fluid>
                 <h1 className="text-center">Current Account</h1>
-                <table className="table table-dark text-center">
-                    <tbody>
+                <Table striped bordered hover variant="dark">
+                    <tbody className="text-center">
                         <tr>
                             <td>Account Id</td>
                             <td>{this.state.account.userId}</td>
@@ -52,9 +54,9 @@ class AccountComponent extends React.Component {
                         </tr>
                     </tbody>
 
-                </table>
+                </Table>
 
-            </div>
+            </Container>
         )
     }
 }
