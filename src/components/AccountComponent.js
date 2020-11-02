@@ -20,9 +20,13 @@ class AccountComponent extends React.Component {
 
     render() {
         return (
-            <Container fluid>
-                <h1 className="text-center">Current Account</h1>
+            <div>
                 <Table striped bordered hover variant="dark">
+                    <thead>
+                    <tr className="text-center" >
+                        <td colSpan="2"> <h3>Current Account</h3></td>
+                    </tr>
+                    </thead>
                     <tbody className="text-center">
                         <tr>
                             <td>Account Id</td>
@@ -55,8 +59,7 @@ class AccountComponent extends React.Component {
                     </tbody>
 
                 </Table>
-
-            </Container>
+            </div>
         )
     }
 }

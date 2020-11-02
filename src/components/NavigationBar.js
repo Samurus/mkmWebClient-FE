@@ -12,7 +12,7 @@ class NavigationBar extends React.Component {
 
     render() {
         return (
-            <Navbar bg="dark">
+            <Navbar bg="dark" sticky={"top"}>
                 <NavbarBrand href="#home">
                     <img
                         src={logo}
