@@ -72,45 +72,50 @@ class StockComponent extends React.Component {
                       {title: "p.game", field: "product.game", editable: false},
                       {title: "p.expansionCollectionNumber", field: "product.expansionCollectionNumber", editable: false},
                       {title: "p.rarity", field: "product.rarity", editable: false},
-                      {title: "productId", field: "productId", editable: false},
+                      {title: "p.productId", field: "product.productId", editable: false},
                       ],
-                      title: "My Stock",
+            title: "My Stock",
       }
     }
 
-    componentDidMount() {
-        StockService.getStockInformation().then((response) => {
-            this.setState({stock: response.data})
-        });
-    }
-
-    render() {
-        return (
-        <MaterialTable
-         title={this.state.title}
-         columns={this.state.columns}
-         data={this.state.stock}
-         icons={tableIcons}
-             handleChange={this.handleChange}
-           options={{
-                 exportButton: true,
-                 exportAllData: true
-               }}
-
-//         cellEditable={{
-//                 onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
-//                   return new Promise((resolve, reject) => {
-////                    const data = this.state.rows;
-////                    const index = this.state.stock.indexOf(oldValue);
-////                    this.state.stock[index] = newValue;
-//
-//                     setTimeout(resolve, 1000);
-//                   });
-//                 }
-//               }}
-        />
-        )
-    }
+  render() {
+    return (
+      <MaterialTable
+        title={this.state.title}
+        columns={this.state.columns}
+        data={this.state.stock}
+        icons={tableIcons}
+        handleChange={this.handleChange}
+        options={{
+          exportButton: true,
+          exportAllData: true,
+          selection: true
+        }}
+        cellEditable={{
+          cellStyle: {},
+          onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
+            return new Promise((resolve, reject) => {
+              setTimeout(resolve, 1000);
+              this.setState((prev) => {
+                return {
+                  ...prev,
+                  stock: prev.stock.map((item, i) => {
+                    if (item.articleId === rowData.articleId) {
+                      return {
+                        ...item,
+                        [columnDef.field]: newValue
+                      };
+                    }
+                    return item;
+                  })
+                };
+              });
+            });
+          }
+        }}
+      />
+    );
+  }
 }
 
-export default StockComponent
+  export default StockComponent
