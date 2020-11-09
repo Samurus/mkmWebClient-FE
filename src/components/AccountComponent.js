@@ -1,14 +1,10 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table'
 import AccountService from "../services/AccountService";
-import {Container} from "react-bootstrap";
 
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 
@@ -38,7 +34,6 @@ class AccountComponent extends React.Component {
 
 //https://v3.material-ui.com/demos/expansion-panels/
     render() {
-        const { classes } = this.props;
         const { expanded } = this.state;
 
         return (

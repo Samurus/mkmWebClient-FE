@@ -1,29 +1,11 @@
 import React from 'react';
-import Table from 'react-bootstrap/Table'
 import StockService from "../services/StockService";
-import {Container} from "react-bootstrap";
 
 import { forwardRef } from 'react';
-import Grid from '@material-ui/core/Grid'
-
+//https://material-ui.com/components/material-icons/
 import MaterialTable from "material-table";
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
-import axios from 'axios'
-import Alert from '@material-ui/lab/Alert';
+import {AddBox,ArrowDownward,Check,ChevronLeft,ChevronRight,Clear,DeleteOutline,Edit,FilterList,FirstPage,LastPage,Remove,SaveAlt,Search,ViewColumn}  from '@material-ui/icons';
+import SaveTwoToneIcon from '@material-ui/icons/SaveTwoTone';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -42,7 +24,8 @@ const tableIcons = {
   Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+  SaveTwoToneIcon: forwardRef((props, ref) => <SaveTwoToneIcon {...props} ref={ref} />),
 };
 
 //https://github.com/effiongcharles/material-ui-table-crud-restapi
@@ -56,8 +39,8 @@ class StockComponent extends React.Component {
             columns: [
                       {title: "id", field: "articleId", hidden: true},
                       {title: "articleId", field: "articleId", editable: false},
-                      {title: "recommendedPrice", field: "price", editable: true, initialEditValue: 'initial edit value'},
-                      {title: "currentPrice", field: "articlePriceEntity.price", editable: false},
+                      {title: "New Price", field: "price", editable: true, initialEditValue: 'initial edit value'},
+                      {title: "Current Price", field: "articlePriceEntity.price", editable: false},
                       {title: "comment", field: "comment", editable: false},
                       {title: "quantity", field: "quantity", editable: false},
                       {title: "condition", field: "condition", editable: false},
@@ -78,6 +61,13 @@ class StockComponent extends React.Component {
       }
     }
 
+      componentDidMount() {
+            StockService.getStockInformation().then((response) => {
+                console.log(response.data)
+                this.setState({stock: response.data})
+            });
+        }
+
   render() {
     return (
       <MaterialTable
@@ -91,25 +81,28 @@ class StockComponent extends React.Component {
           exportAllData: true,
           selection: true
         }}
+         actions={[
+                {
+                  tooltip: 'send selected to MKM',
+                  icon: () => <SaveTwoToneIcon />,
+                  onClick: (evt, data) => StockService.postArticles(data).then((response) => {
+                                                          console.log(response.data)
+                                                          this.setState({stock: response.data})
+                                                      })
+                }
+              ]}
         cellEditable={{
           cellStyle: {},
           onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
             return new Promise((resolve, reject) => {
-              setTimeout(resolve, 1000);
+              setTimeout(resolve, 500);
               this.setState((prev) => {
-                return {
-                  ...prev,
-                  stock: prev.stock.map((item, i) => {
-                    if (item.articleId === rowData.articleId) {
-                      return {
-                        ...item,
-                        [columnDef.field]: newValue
-                      };
-                    }
-                    return item;
-                  })
-                };
-              });
+                              rowData[columnDef.field] = newValue;
+                              return {
+                                ...prev,
+                                stock: prev.stock
+                              };
+                            });
             });
           }
         }}
