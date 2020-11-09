@@ -2,6 +2,7 @@ import React from 'react';
 import StockService from "../services/StockService";
 
 import { forwardRef } from 'react';
+import TextField from '@material-ui/core/TextField';
 //https://material-ui.com/components/material-icons/
 import MaterialTable from "material-table";
 import {AddBox,ArrowDownward,Check,ChevronLeft,ChevronRight,Clear,DeleteOutline,Edit,FilterList,FirstPage,LastPage,Remove,SaveAlt,Search,ViewColumn}  from '@material-ui/icons';
@@ -26,6 +27,7 @@ const tableIcons = {
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
   SaveTwoToneIcon: forwardRef((props, ref) => <SaveTwoToneIcon {...props} ref={ref} />),
+  TextField: forwardRef((props, ref) => <TextField {...props} ref={ref} />),
 };
 
 //https://github.com/effiongcharles/material-ui-table-crud-restapi
@@ -38,24 +40,27 @@ class StockComponent extends React.Component {
             stock: [{"articleId": 361168434,"languageCode": "en","comment": "TEST","price": 6.48,"quantity": 1,"product": {"productId": 283553,"name": "TESTHangarback Walker","categoryId": 1,"categoryName": "TESTMagic Single","imageUrl": "TEST./img/items/1/ORI/283553.jpg","game": "MTG","expansionCollectionNumber": "229","rarity": "Rare","expansionName": "Magic Origins",}},],
             columns: [
                       {title: "id", field: "articleId", hidden: true},
-                      {title: "articleId", field: "articleId", editable: false},
-                      {title: "New Price", field: "price", editable: true, initialEditValue: 'initial edit value'},
-                      {title: "Current Price", field: "articlePriceEntity.price", editable: false},
-                      {title: "comment", field: "comment", editable: false},
-                      {title: "quantity", field: "quantity", editable: false},
-                      {title: "condition", field: "condition", editable: false},
-                      {title: "p.name", field: "product.name", editable: false},
-                      {title: "p.expansionName", field: "product.expansionName", editable: false},
-                      {title: "languageCode", field: "languageCode", editable: false},
-                      {title: "foil", field: "foil", editable: false},
-                      {title: "signed", field: "signed", editable: false},
-                      {title: "altered", field: "altered", editable: false},
-                      {title: "playset", field: "playset", editable: false},
-                      {title: "p.imageUrl", field: "product.imageUrl", editable: false},
-                      {title: "p.game", field: "product.game", editable: false},
-                      {title: "p.expansionCollectionNumber", field: "product.expansionCollectionNumber", editable: false},
-                      {title: "p.rarity", field: "product.rarity", editable: false},
-                      {title: "p.productId", field: "product.productId", editable: false},
+                      {title: "p.name", field: "product.name", editable:'never'},
+                      {title: "New Price", field: "price", editable: true, type: 'currency', cellStyle: {width: 150,minWidth: 150}},
+                      {title: "Current Price", field: "articlePriceEntity.price", editable:'never', type: 'currency'},
+                      {title: "comment", field: "comment", editable: true, initialEditValue: 'intial comment', defaultValue: "default comment", cellStyle: {width: 250,minWidth: 250},
+                      render: rowData => {if (rowData.comment) return (<div style={{textAlign: 'left',width: 250}}>{rowData.comment}</div>)
+                                          else return (<div style={{textAlign: 'left', opacity: 0.1, width: 250}}>{"comment"}</div>)
+                                          }},
+                      {title: "quantity", field: "quantity", editable: 'never', type: 'numeric'},
+                      {title: "condition", field: "condition", editable:'never'},
+                      {title: "p.expansionName", field: "product.expansionName", editable:'never'},
+                      {title: "languageCode", field: "languageCode", editable:'never'},
+                      {title: "foil", field: "foil", editable:'never', type: 'boolean'},
+                      {title: "signed", field: "signed", editable:'never', type: 'boolean'},
+                      {title: "altered", field: "altered", editable:'never', type: 'boolean'},
+                      {title: "playset", field: "playset", editable:'never', type: 'boolean'},
+                      {title: "p.imageUrl", field: "product.imageUrl", editable:'never'},
+                      {title: "p.game", field: "product.game", editable:'never'},
+                      {title: "p.expansionCollectionNumber", field: "product.expansionCollectionNumber", editable:'never'},
+                      {title: "p.rarity", field: "product.rarity", editable:'never'},
+                      {title: "p.productId", field: "product.productId", editable:'never'},
+                      {title: "articleId", field: "articleId", editable: 'never'},
                       ],
             title: "My Stock",
       }
@@ -67,7 +72,7 @@ class StockComponent extends React.Component {
                 this.setState({stock: response.data})
             });
         }
-
+//currencySetting
   render() {
     return (
       <MaterialTable
@@ -76,10 +81,14 @@ class StockComponent extends React.Component {
         data={this.state.stock}
         icons={tableIcons}
         handleChange={this.handleChange}
+        tableLayout='fixed'
         options={{
+          pageSize: 8,
           exportButton: true,
           exportAllData: true,
-          selection: true
+          selection: true,
+          filtering: true,
+          headerStyle: {textAlign:'left'},
         }}
          actions={[
                 {
@@ -92,7 +101,7 @@ class StockComponent extends React.Component {
                 }
               ]}
         cellEditable={{
-          cellStyle: {},
+          cellStyle: {padding: 0 },
           onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
             return new Promise((resolve, reject) => {
               setTimeout(resolve, 500);
