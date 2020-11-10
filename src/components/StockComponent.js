@@ -116,12 +116,23 @@ class StockComponent extends React.Component {
       }
     }
 
-      componentDidMount() {
+    componentDidMount() {
             StockService.getStockInformation().then((response) => {
-                console.log(response.data)
                 this.setState({stock: response.data})
             });
         }
+
+    //https://reactjs.org/docs/faq-functions.html
+    updateStockByFilter = () => {
+        StockService.findStockByExpansionName("Welcome Deck 2017").then((response) => {
+        this.setState({stock: response.data})
+    });}
+
+    gesamterStock = () => {
+          StockService.getStockInformation().then((response) => {
+          this.setState({stock: response.data})
+    });}
+
 //currencySetting
   render() {
     return (
