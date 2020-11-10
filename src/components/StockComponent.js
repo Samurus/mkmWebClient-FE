@@ -3,11 +3,13 @@ import StockService from "../services/StockService";
 
 import { forwardRef } from 'react';
 import TextField from '@material-ui/core/TextField';
-//https://material-ui.com/components/material-icons/
+import Link from '@material-ui/core/Link';
 import MaterialTable from "material-table";
 import {AddBox,ArrowDownward,Check,ChevronLeft,ChevronRight,Clear,DeleteOutline,Edit,FilterList,FirstPage,LastPage,Remove,SaveAlt,Search,ViewColumn}  from '@material-ui/icons';
 import SaveTwoToneIcon from '@material-ui/icons/SaveTwoTone';
 
+
+//https://material-ui.com/components/material-icons/
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -30,39 +32,87 @@ const tableIcons = {
   TextField: forwardRef((props, ref) => <TextField {...props} ref={ref} />),
 };
 
+
 //https://github.com/effiongcharles/material-ui-table-crud-restapi
+//https://material-table.com/
 class StockComponent extends React.Component {
 
 
     constructor(props) {
         super(props);
         this.state = {
-            stock: [{"articleId": 361168434,"languageCode": "en","comment": "TEST","price": 6.48,"quantity": 1,"product": {"productId": 283553,"name": "TESTHangarback Walker","categoryId": 1,"categoryName": "TESTMagic Single","imageUrl": "TEST./img/items/1/ORI/283553.jpg","game": "MTG","expansionCollectionNumber": "229","rarity": "Rare","expansionName": "Magic Origins",}},],
+//            stock: [{"articleId": 361168434,"languageCode": "en","comment": "loading","price": 6.48,"quantity": 1,"product": {"productId": 283553,"name": "TESTHangarback Walker","categoryId": 1,"categoryName": "TESTMagic Single","imageUrl": "TEST./img/items/1/ORI/283553.jpg","game": "MTG","expansionCollectionNumber": "229","rarity": "Rare","expansionName": "Magic Origins",}},],
+            stock: [],
             columns: [
                       {title: "id", field: "articleId", hidden: true},
-                      {title: "p.name", field: "product.name", editable:'never'},
-                      {title: "New Price", field: "price", editable: true, type: 'currency', cellStyle: {width: 150,minWidth: 150}},
-                      {title: "Current Price", field: "articlePriceEntity.price", editable:'never', type: 'currency'},
-                      {title: "comment", field: "comment", editable: true, initialEditValue: 'intial comment', defaultValue: "default comment", cellStyle: {width: 250,minWidth: 250},
-                      render: rowData => {if (rowData.comment) return (<div style={{textAlign: 'left',width: 250}}>{rowData.comment}</div>)
-                                          else return (<div style={{textAlign: 'left', opacity: 0.1, width: 250}}>{"comment"}</div>)
-                                          }},
+                      {title: "Kartenname", field: "product.name", editable:'never'},
+                      {title: "Neuer Preis", field: "price", editable: true, type: 'currency', currencySetting:{ locale: 'de',currencyCode:'Eur', minimumFractionDigits:0, maximumFractionDigits:2}, cellStyle: {width: 150,minWidth: 150}},
+                      {title: "Akt. Preis", field: "articlePriceEntity.price", editable:'never', type: 'currency', currencySetting:{locale: 'de',currencyCode:'Eur', minimumFractionDigits:0, maximumFractionDigits:2}},
+                      {title: "Kommentar", field: "comment", editable: true, initialEditValue: 'intial comment', defaultValue: "default comment", cellStyle: {width: 250,minWidth: 250},
+                        render: rowData => {if (rowData.comment) return (<div style={{textAlign: 'left',width: 250}}>{rowData.comment}</div>); else return (<div style={{textAlign: 'left', opacity: 0.1, width: 250}}>{"Kommentarplatzhalter"}</div>)}},
                       {title: "quantity", field: "quantity", editable: 'never', type: 'numeric'},
                       {title: "condition", field: "condition", editable:'never'},
-                      {title: "p.expansionName", field: "product.expansionName", editable:'never'},
-                      {title: "languageCode", field: "languageCode", editable:'never'},
+                      {title: "expansion", field: "product.expansionName", editable:'never'},
+                      {title: "language", field: "languageCode", editable:'never'},
                       {title: "foil", field: "foil", editable:'never', type: 'boolean'},
                       {title: "signed", field: "signed", editable:'never', type: 'boolean'},
                       {title: "altered", field: "altered", editable:'never', type: 'boolean'},
                       {title: "playset", field: "playset", editable:'never', type: 'boolean'},
-                      {title: "p.imageUrl", field: "product.imageUrl", editable:'never'},
-                      {title: "p.game", field: "product.game", editable:'never'},
-                      {title: "p.expansionCollectionNumber", field: "product.expansionCollectionNumber", editable:'never'},
-                      {title: "p.rarity", field: "product.rarity", editable:'never'},
-                      {title: "p.productId", field: "product.productId", editable:'never'},
-                      {title: "articleId", field: "articleId", editable: 'never'},
+                      {title: "Rarity", field: "product.rarity", editable:'never'},
+                      {title: "imageUrl", field: "product.imageUrl", editable:'never',
+                      render: rowData => {return (<div><Link href={`https://sandbox.cardmarket.com${rowData.product.imageUrl.substring(1)}`} activeClassName="current">{rowData.product.imageUrl}</Link></div>);}},
+                      {title: "game", field: "product.game", editable:'never'},
+                      {title: "Collection Number", field: "product.expansionCollectionNumber", editable:'never'},
+                      {title: "Product Id", field: "product.productId", editable:'never'},
+                      {title: "Article Id", field: "articleId", editable: 'never'},
                       ],
-            title: "My Stock",
+            title: "Mein Stock",
+            localization: {body: {
+                           emptyDataSourceMessage: 'Keine Einträge',
+                           addTooltip: 'Hinzufügen',
+                           deleteTooltip: 'Löschen',
+                           editTooltip: 'Bearbeiten',
+                           filterRow: {
+                             filterTooltip: 'Filter'
+                           },
+                           editRow: {
+                             deleteText: 'Diese Zeile wirklich löschen?',
+                             cancelTooltip: 'Abbrechen',
+                             saveTooltip: 'Speichern'
+                           }
+                         },
+                         grouping: {
+                           placeholder: 'Spalten ziehen ...',
+                           groupedBy: 'Gruppiert nach:'
+                         },
+                         header: {
+                           actions: 'Aktionen'
+                         },
+                         pagination: {
+                           labelDisplayedRows: '{from}-{to} von {count}',
+                           labelRowsSelect: 'Zeilen',
+                           labelRowsPerPage: 'Zeilen pro Seite:',
+                           firstAriaLabel: 'Erste Seite',
+                           firstTooltip: 'Erste Seite',
+                           previousAriaLabel: 'Vorherige Seite',
+                           previousTooltip: 'Vorherige Seite',
+                           nextAriaLabel: 'Nächste Seite',
+                           nextTooltip: 'Nächste Seite',
+                           lastAriaLabel: 'Letzte Seite',
+                           lastTooltip: 'Letzte Seite'
+                         },
+                         toolbar: {
+                           addRemoveColumns: 'Spalten hinzufügen oder löschen',
+                           nRowsSelected: '{0} Zeile(n) ausgewählt',
+                           showColumnsTitle: 'Zeige Spalten',
+                           showColumnsAriaLabel: 'Zeige Spalten',
+                           exportTitle: 'Export',
+                           exportAriaLabel: 'Export',
+                           exportName: 'Export als CSV',
+                           searchTooltip: 'Suche',
+                           searchPlaceholder: 'Suche'
+                         }
+                       }
       }
     }
 
@@ -79,6 +129,7 @@ class StockComponent extends React.Component {
         title={this.state.title}
         columns={this.state.columns}
         data={this.state.stock}
+        localization={this.state.localization}
         icons={tableIcons}
         handleChange={this.handleChange}
         tableLayout='fixed'
