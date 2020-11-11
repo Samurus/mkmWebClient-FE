@@ -1,14 +1,15 @@
-import AccountComponent from "./components/AccountComponent";
-import StockComponent from "./components/StockComponent";
 import React from "react";
+import AccountComponent from "./components/AccountComponent";
+import SearchComponent from "./components/SearchComponent";
+
 
 function App() {
-  return (
-    <div id={"App"}>
-      <AccountComponent />
-      <StockComponent />
-    </div>
-  );
+    return (
+        <div id={"App"}>
+            <AccountComponent/>
+            <SearchComponent/>
+        </div>
+    );
 }
 
 export default App;

@@ -1,12 +1,12 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table'
-import AccountService from "../services/AccountService";
 
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Link from '@material-ui/core/Link';
+import ApiService from "../services/ApiService";
 
 
 class AccountComponent extends React.Component {
@@ -24,10 +24,8 @@ class AccountComponent extends React.Component {
         });
       };
 
-
     componentDidMount() {
-        AccountService.getAccountInformation().then((response) => {
-            console.log(response.data)
+        ApiService.getAccountInformation().then((response) => {
             this.setState({account: response.data})
         });
     }
